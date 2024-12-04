@@ -11,4 +11,8 @@ public interface UserService {
 	
 	User sigUp(User user);
 
+	String login(String value, String password);
+	
+	User verifyOtp(int otp);
+
 }
