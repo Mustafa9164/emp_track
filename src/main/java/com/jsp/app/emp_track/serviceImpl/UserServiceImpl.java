@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 		User u1 = userRepo.login(value, value);
 		if(u1 != null) {
 			if(pass.matches(password, u1.getPassword())) {
-				return sendOtp(u1.getEmail());
+				return sendOtp(u1.getEmail(),u1.getUserId());
 			}else {
 				throw new InvalidCredential();
 			}
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	
-	public String sendOtp(String email) {
+	public String sendOtp(String email,String userId) {
 		SimpleMailMessage mail=new SimpleMailMessage();
 		int otp=(int)(Math.random()*10000000);
 		mail.setFrom("mdrmustafa1234@gmail.com");
@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
 		mail.setSubject("Otp for login");
 		mail.setText("pls find the otp below \n Otp :"+otp+"\n please dont share with anyOne");
 		javaMailSender.send(mail);
+		otpRepo.save(new OTP(userId,otp));
 		return "OTP Send Through Email";
 
 
